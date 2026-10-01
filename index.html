@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vivero La Esperanza - Catálogo Digital Interactivo</title>
+<!-- Fuentes de alta calidad -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,400&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --primary: #1e3a29;
+  --primary-hover: #2d523c;
+  --accent: #25d366;
+  --bg-color: #f7f8f6;
+  --card-bg: #ffffff;
+  --text-main: #222222;
+  --text-muted: #666666;
+  --promo-color: #d97706;
+  --border-color: #e5e7eb;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  margin: 0;
+  padding: 0 0 100px 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* NAVBAR SUPERIOR CON MENÚ Y TÍTULO */
+.top-navbar {
+  position: sticky;
+  top: 0;
+  background: #ffffff;
+  border-bottom: 1px solid var(--border-color);
+  z-index: 900;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+}
+
+.menu-toggle-btn {
+  background: none;
+  border: none;
+  font-size: 1.05rem;
+  cursor: pointer;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+}
+
+.nav-brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin: 0;
+}
+
+/* MENÚ LATERAL DESPLEGABLE (OFF-CANVAS) */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  z-index: 1100;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.sidebar-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.sidebar-menu {
+  position: fixed;
+  top: 0;
+  left: -320px;
+  width: 300px;
+  height: 100%;
+  background: #ffffff;
+  z-index: 1200;
+  box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+  transition: left 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 20px;
+  overflow-y: auto;
+}
+
+.sidebar-menu.active {
+  left: 0;
+}
+
+.sidebar-close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  align-self: flex-end;
+  cursor: pointer;
+  color: var(--text-muted);
+}
+
+.sidebar-section {
+  margin-bottom: 24px;
+}
+
+.sidebar-title {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.sidebar-about {
+  font-size: 0.85rem;
+  color: #444444;
+  line-height: 1.5;
+}
+
+.sidebar-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-links li {
+  margin-bottom: 10px;
+}
+
+.sidebar-links a, .sidebar-links button {
+  background: none;
+  border: none;
+  color: var(--text-main);
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  width: 100%;
+  text-align: left;
+}
+
+.sidebar-links button:hover, .sidebar-links a:hover {
+  color: var(--primary);
+}
+
+.sidebar-links .highlight-promo {
+  color: var(--promo-color);
+  font-weight: 600;
+}
+
+/* HEADER & BANNER */
+header {
+  text-align: center;
+  max-width: 800px;
+  margin: 30px auto 20px auto;
+  padding: 0 20px;
+}
+
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.4rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin: 0 0 6px 0;
+}
+
+.subtitle {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-weight: 500;
+}
+
+.promo-banner {
+  max-width: 1000px;
+  margin: 0 auto 25px auto;
+  background: #fef3c7;
+  border: 1px solid #f59e0b;
+  border-radius: 10px;
+  padding: 12px 20px;
+  text-align: center;
+  font-size: 0.88rem;
+  color: #92400e;
+  font-weight: 500;
+}
+
+/* BUSCADOR POR PLANTA */
+.search-container {
+  max-width: 700px;
+  margin: 0 auto 30px auto;
+  padding: 0 20px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 14px 22px;
+  border-radius: 30px;
+  border: 1px solid var(--border-color);
+  font-size: 0.95rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.search-input:focus {
+  border-color: var(--primary);
+}
+
+/* GRIDS Y TARJETAS */
+.catalog-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.category-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  color: var(--primary);
+  margin: 40px 0 20px 0;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--primary);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 22px;
+}
+
+.card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.07);
+}
+
+.card img {
+  width: 100%;
+  height: 170px;
+  object-fit: cover;
+  background-color: #f3f4f6;
+}
+
+.card-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.card-title {
+  font-size: 0.98rem;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+}
+
+.card-subtitle {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.card-price {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 4px;
+}
+
+.item-promo-badge {
+  font-size: 0.72rem;
+  color: var(--promo-color);
+  font-weight: 600;
+  height: 18px;
+  margin-bottom: 12px;
+}
+
+.quantity-control {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f9fafb;
+  border-radius: 8px;
+  padding: 4px;
+  margin-top: auto;
+  border: 1px solid var(--border-color);
+}
+
+.btn-qty {
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--border-color);
+  background: #ffffff;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.btn-qty:hover {
+  background: #f3f4f6;
+}
+
+.qty-number {
+  font-weight: 600;
+  font-size: 0.88rem;
+}
+
+/* 🛒 BOTÓN Y MODAL INTERACTIVO DE CARRITO FLOTANTE */
+.cart-float-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--primary);
+  color: #ffffff;
+  border: none;
+  border-radius: 50px;
+  padding: 14px 22px;
+  font-weight: 600;
+  font-size: 0.92rem;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  cursor: pointer;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: transform 0.2s ease;
+}
+
+.cart-float-btn:hover {
+  transform: scale(1.05);
+}
+
+.cart-badge-count {
+  background: var(--accent);
+  color: #ffffff;
+  border-radius: 12px;
+  padding: 2px 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+/* MODAL DEL CARRITO */
+.cart-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  z-index: 1300;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.cart-modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.cart-modal {
+  position: fixed;
+  bottom: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 450px;
+  background: #ffffff;
+  border-radius: 20px 20px 0 0;
+  z-index: 1400;
+  box-shadow: 0 -10px 30px rgba(0,0,0,0.15);
+  transition: bottom 0.35s ease;
+  overflow: hidden;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.cart-modal.active {
+  bottom: 0;
+}
+
+.cart-modal-header {
+  padding: 18px 20px;
+  background: var(--primary);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cart-modal-header h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.cart-modal-close {
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+.cart-modal-body {
+  padding: 16px 20px;
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+.cart-item-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px dashed var(--border-color);
+  font-size: 0.85rem;
+}
+
+.cart-item-title {
+  font-weight: 600;
+}
+
+.cart-item-promo-tag {
+  font-size: 0.7rem;
+  color: var(--promo-color);
+  font-weight: 600;
+}
+
+.cart-breakdown {
+  margin-top: 15px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.88rem;
+}
+
+.breakdown-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  color: var(--text-muted);
+}
+
+.breakdown-row.total {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--primary);
+  border-top: 1px solid var(--border-color);
+  padding-top: 8px;
+  margin-top: 8px;
+}
+
+.cart-modal-footer {
+  padding: 16px 20px;
+  background: #f9fafb;
+}
+
+.btn-whatsapp-submit {
+  width: 100%;
+  background-color: var(--accent);
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.92rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR SUPERIOR -->
+<div class="top-navbar">
+  <button class="menu-toggle-btn" onclick="toggleSidebar()">
+    <span>☰</span> Menú
+  </button>
+  <div class="nav-brand">Vivero La Esperanza</div>
+  <div style="width: 60px;"></div>
+</div>
+
+<!-- OVERLAY Y MENÚ LATERAL -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<div class="sidebar-menu" id="sidebarMenu">
+  <button class="sidebar-close-btn" onclick="toggleSidebar()">✕</button>
+  
+  <div class="sidebar-section">
+    <div class="sidebar-title">Quiénes Somos</div>
+    <p class="sidebar-about">
+      En <strong>Vivero La Esperanza</strong> cultivamos plantas de interior, exterior y plantas ornamentales para llenar tus espacios de vida y frescura. Brindamos asesoramiento personalizado y envíos a domicilio.
+    </p>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-title">Categorías de Productos</div>
+    <ul class="sidebar-links">
+      <li><button onclick="filterCategory('all')">🌿 Todos los Productos</button></li>
+      <li><button onclick="filterCategory('interior')">🪴 Interior y Exterior (3L y 5L)</button></li>
+      <li><button onclick="filterCategory('florales')">🌸 Plantas y Florales (N°12)</button></li>
+      <li><button onclick="filterCategory('cercos')">🌳 Cercos Vivos</button></li>
+      <li><button onclick="filterCategory('insumos')">📦 Insumos y Macetas</button></li>
+      <li><button class="highlight-promo" onclick="filterCategory('promos')">🔥 Plantas con Descuento (20% OFF)</button></li>
+    </ul>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-title">Contacto y Redes</div>
+    <ul class="sidebar-links">
+      <li><a href="https://instagram.com" target="_blank">📸 Instagram: @viverolaesperanza</a></li>
+      <li><a href="https://wa.me/5491130346893" target="_blank">💬 WhatsApp: 11 3034-6893</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- HEADER Y BARRA DE BÚSQUEDA -->
+<header>
+  <h1>Vivero La Esperanza</h1>
+  <p class="subtitle">Catálogo Digital Interactivo · Lista de Precios</p>
+</header>
+
+<div class="promo-banner">
+  🌿 <strong>PROMO X CANTIDAD:</strong> Comprando <strong>5 o más unidades</strong> de la misma planta, ¡obtenés un <strong>20% DE DESCUENTO</strong> automático!
+</div>
+
+<!-- BUSCADOR POR PLANTA -->
+<div class="search-container">
+  <input type="text" id="searchInput" class="search-input" placeholder="🔍 Buscar por nombre de planta o insumo (ej: Monstera, Maceta, Potus)...">
+</div>
+
+<div class="catalog-container" id="catalog"></div>
+
+<!-- BOTÓN FLOTANTE DE CARRITO -->
+<button class="cart-float-btn" onclick="toggleCartModal()">
+  <span>🛒 Mi Pedido</span>
+  <span class="cart-badge-count" id="cartCount">0</span>
+  <span id="cartTotalBtn">$0</span>
+</button>
+
+<!-- OVERLAY Y MODAL DEL CARRITO -->
+<div class="cart-modal-overlay" id="cartModalOverlay" onclick="toggleCartModal()"></div>
+
+<div class="cart-modal" id="cartModal">
+  <div class="cart-modal-header">
+    <h3>🛒 Tu Pedido</h3>
+    <button class="cart-modal-close" onclick="toggleCartModal()">✕</button>
+  </div>
+
+  <div class="cart-modal-body" id="cartModalBody">
+    <!-- Contenido generado con JS -->
+  </div>
+
+  <div class="cart-modal-footer">
+    <button class="btn-whatsapp-submit" id="sendOrderBtn">
+      🟢 Enviar Pedido por WhatsApp
+    </button>
+  </div>
+</div>
+
+<script>
+const PHONE_NUMBER = "5491130346893";
+const DEFAULT_IMAGE = "https://images.unsplash.com/photo-1463936575829-25148e1db1b8?auto=format&fit=crop&w=500&q=80";
+
+// ⚙️ DESCUENTO DEL 20% A PARTIR DE 5 UNIDADES
+const PROMO_THRESHOLD = 5; 
+const DISCOUNT_PERCENT = 20;
+
+const catalogData = [
+{
+  category: "🪴 1. Plantas de Interior y Exterior (Maceta N°3 - 3L)",
+  tag: "interior",
+  items: [
+    { id: "1", name: "Pennisetum", size: "3 Litros", priceNum: 6750, img: "" },
+    { id: "2", name: "Petunia Colgante", size: "3 Litros", priceNum: 5050, img: "" },
+    { id: "3", name: "Lengua de Suegra", size: "3 Litros", priceNum: 10150, img: "" },
+    { id: "4", name: "Monstera Adansonii", size: "3 Litros", priceNum: 8450, img: "" },
+    { id: "5", name: "Salvia Leucantha", size: "3 Litros", priceNum: 8450, img: "" },
+    { id: "6", name: "Coleos", size: "3 Litros", priceNum: 5050, img: "" },
+    { id: "7", name: "Dieffenbachia", size: "3 Litros", priceNum: 8450, img: "" },
+    { id: "8", name: "Dracena verde", size: "3 Litros", priceNum: 8450, img: "" },
+    { id: "9", name: "Osteospermum", size: "3 Litros", priceNum: 9300, img: "" },
+    { id: "10", name: "Yuca", size: "3 Litros", priceNum: 12650, img: "" },
+    { id: "11", name: "Magoyana", size: "3 Litros", priceNum: 12650, img: "" },
+    { id: "12", name: "Wambe (Güembe)", size: "3 Litros", priceNum: 12650, img: "" },
+    { id: "13", name: "Areca", size: "3 Litros", priceNum: 10950, img: "" },
+    { id: "14", name: "Euforbia", size: "3 Litros", priceNum: 9300, img: "" },
+    { id: "15", name: "Ficus Triangular", size: "3 Litros", priceNum: 13500, img: "" },
+    { id: "16", name: "Palmito", size: "3 Litros", priceNum: 10950, img: "" },
+    { id: "17", name: "Singonio", size: "3 Litros", priceNum: 12650, img: "" },
+    { id: "18", name: "Sisus", size: "3 Litros", priceNum: 12650, img: "https://http2.mlstatic.com/D_NQ_NP_704152-MLA104907423822_012026-F.jpg" },
+    { id: "19", name: "Potus", size: "3 Litros", priceNum: 12650, img: "https://http2.mlstatic.com/D_NQ_NP_878950-MLA109370689281_032026-O.webp" },
+    { id: "20", name: "Palmera Fénix", size: "3 Litros", priceNum: 12650, img: "https://http2.mlstatic.com/D_Q_NP_2X_808343-MLA106787748366_022026-P.webp" },
+    { id: "21", name: "Monstera", size: "3 Litros", priceNum: 11800, img: "https://http2.mlstatic.com/D_Q_NP_2X_844426-MLA106779287772_022026-P.webp" },
+    { id: "22", name: "Lavanda", size: "3 Litros", priceNum: 5050, img: "https://http2.mlstatic.com/D_NQ_NP_961951-MLA77131474206_062024-O.webp" },
+    { id: "23", name: "Palo de Agua", size: "3 Litros", priceNum: 11800, img: "https://http2.mlstatic.com/D_NQ_NP_635748-MLA111647005239_052026-O.webp" }
+  ]
+},
+{
+  category: "🌿 2. Plantas en Maceta N°5 (5L)",
+  tag: "interior",
+  items: [
+    { id: "24", name: "Palo de Agua", size: "5 Litros", priceNum: 15200, img: "https://http2.mlstatic.com/D_NQ_NP_894197-MLA109167382054_042026-O.webp" },
+    { id: "25", name: "Crotón", size: "5 Litros", priceNum: 7600, img: "https://http2.mlstatic.com/D_NQ_NP_674538-MLA107480076525_022026-F.jpg" },
+    { id: "26", name: "Anthurium", size: "5 Litros", priceNum: 8450, img: "https://http2.mlstatic.com/D_NQ_NP_628958-MLA109418877224_042026-O.webp" }
+  ]
+},
+{
+  category: "🌸 3. Plantas y Florales (Maceta N°12)",
+  tag: "florales",
+  items: [
+    { id: "27", name: "Pensamiento", size: "Maceta N°12", priceNum: 2200, img: "https://http2.mlstatic.com/D_NQ_NP_996428-MLU84311344339_052025-O.webp" },
+    { id: "28", name: "Gazania", size: "Maceta N°12", priceNum: 2200, img: "" },
+    { id: "29", name: "Azúcar", size: "Maceta N°12", priceNum: 2200, img: "" },
+    { id: "30", name: "Incienso", size: "Maceta N°12", priceNum: 11800, img: "" },
+    { id: "31", name: "Sansevieria", size: "Maceta N°12", priceNum: 6750, img: "" },
+    { id: "32", name: "Palo de Agua", size: "Maceta N°12", priceNum: 6750, img: "" },
+    { id: "33", name: "Marginata", size: "Maceta N°12", priceNum: 5050, img: "" },
+    { id: "34", name: "Begonia Doble", size: "Maceta N°12", priceNum: 2200, img: "" },
+    { id: "35", name: "Malbón Maverick", size: "Maceta N°12", priceNum: 5050, img: "" },
+    { id: "36", name: "Glandularia", size: "Maceta N°12", priceNum: 1700, img: "https://http2.mlstatic.com/D_NQ_NP_882083-MLA43668135025_102020-O.webp" },
+    { id: "37", name: "Agapanto", size: "Maceta N°12", priceNum: 6750, img: "" },
+    { id: "38", name: "Suculentas", size: "Maceta N°12", priceNum: 2050, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRb4X0APYPW0AHOwTFnSUk1V7keu_7Lgw86aNg3RTcJTA&s" },
+    { id: "39", name: "Ají Ornamental", size: "Maceta N°12", priceNum: 2050, img: "" },
+    { id: "40", name: "Corazón Púrpura", size: "Maceta N°12", priceNum: 20600, img: "" },
+    { id: "41", name: "Coleos", size: "Maceta N°12", priceNum: 2050, img: "" }
+  ]
+},
+{
+  category: "🌵 4. EJEMPLARES ESPECIALES Y CERCOS VIVOS",
+  tag: "cercos",
+  items: [
+    { id: "42", name: "Palmera (ejemplar)", size: "Plantín", priceNum: 118150, img: "" },
+    { id: "43", name: "Cactus", size: "Plantín", priceNum: 1700, img: "" },
+    { id: "44", name: "Eugenia — unidad", size: "Plantín", priceNum: 10950, img: "" },
+    { id: "45", name: "Eugenia grande — unidad", size: "Plantín", priceNum: 13500, img: "" }
+  ]
+},
+{
+  category: "📦 5. INSUMOS Y MACETAS",
+  tag: "insumos",
+  items: [
+    { id: "46", name: "Tierra para Plantar", size: "Bolsa", priceNum: 13500, img: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&w=500&q=80" },
+    { id: "47", name: "Maceta Cemento", size: "Unidad", priceNum: 10000, img: "" }
+  ]
+}
+];
+
+let cart = {};
+let currentFilter = 'all';
+
+function formatCurrency(val) {
+  return "$" + Math.round(val).toLocaleString('es-AR');
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebarMenu').classList.toggle('active');
+  document.getElementById('sidebarOverlay').classList.toggle('active');
+}
+
+function toggleCartModal() {
+  document.getElementById('cartModal').classList.toggle('active');
+  document.getElementById('cartModalOverlay').classList.toggle('active');
+}
+
+// RENDERIZADO DEL CATÁLOGO
+function renderCatalog(searchQuery = '') {
+  const container = document.getElementById('catalog');
+  container.innerHTML = "";
+
+  catalogData.forEach(cat => {
+    if (currentFilter !== 'all' && currentFilter !== 'promos' && cat.tag !== currentFilter) return;
+
+    let itemsToRender = cat.items.filter(item => 
+      item.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+      item.size.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    if (currentFilter === 'promos') {
+      itemsToRender = itemsToRender.filter(item => (cart[item.id] ? cart[item.id].qty : 0) >= PROMO_THRESHOLD);
+    }
+
+    if (itemsToRender.length === 0) return;
+
+    const catTitle = document.createElement('h2');
+    catTitle.className = 'category-title';
+    catTitle.innerText = cat.category;
+    container.appendChild(catTitle);
+
+    const grid = document.createElement('div');
+    grid.className = 'grid';
+
+    itemsToRender.forEach(item => {
+      const imageSrc = item.img && item.img.trim() !== "" ? item.img : DEFAULT_IMAGE;
+      const currentQty = cart[item.id] ? cart[item.id].qty : 0;
+      const hasPromo = currentQty >= PROMO_THRESHOLD;
+
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <img src="${imageSrc}" alt="${item.name}" loading="lazy" onerror="this.src='${DEFAULT_IMAGE}'">
+        <div class="card-body">
+          <div class="card-title">${item.name}</div>
+          <div class="card-subtitle">${item.size}</div>
+          <div class="card-price">${formatCurrency(item.priceNum)}</div>
+          <div class="item-promo-badge" id="badge-${item.id}">${hasPromo ? '🔥 20% OFF Aplicado' : ''}</div>
+          <div class="quantity-control">
+            <button class="btn-qty" onclick="updateQty('${item.id}', '${item.name}', ${item.priceNum}, -1)">-</button>
+            <span class="qty-number" id="qty-${item.id}">${currentQty}</span>
+            <button class="btn-qty" onclick="updateQty('${item.id}', '${item.name}', ${item.priceNum}, 1)">+</button>
+          </div>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+
+    container.appendChild(grid);
+  });
+}
+
+function filterCategory(category) {
+  currentFilter = category;
+  toggleSidebar();
+  renderCatalog(document.getElementById('searchInput').value);
+}
+
+// ACTUALIZACIÓN DE CANTIDADES
+function updateQty(id, name, priceNum, change) {
+  if (!cart[id]) {
+    cart[id] = { name, priceNum, qty: 0 };
+  }
+
+  cart[id].qty += change;
+
+  if (cart[id].qty <= 0) {
+    delete cart[id];
+  }
+
+  const currentQty = cart[id] ? cart[id].qty : 0;
+  
+  const qtyElement = document.getElementById(`qty-${id}`);
+  if (qtyElement) qtyElement.innerText = currentQty;
+
+  const badgeElement = document.getElementById(`badge-${id}`);
+  if (badgeElement) {
+    badgeElement.innerText = currentQty >= PROMO_THRESHOLD ? '🔥 20% OFF Aplicado' : '';
+  }
+
+  updateCartSummary();
+}
+
+function updateCartSummary() {
+  const items = Object.values(cart);
+  const totalItems = items.reduce((sum, item) => sum + item.qty, 0);
+
+  let subtotalGeneral = 0;
+  let totalDescuentoGeneral = 0;
+
+  const modalBody = document.getElementById('cartModalBody');
+  modalBody.innerHTML = "";
+
+  if (items.length === 0) {
+    modalBody.innerHTML = `<div style="text-align: center; color: #888; padding: 20px 0;">El carrito está vacío</div>`;
+  } else {
+    items.forEach(item => {
+      const itemSubtotal = item.priceNum * item.qty;
+      subtotalGeneral += itemSubtotal;
+      const hasPromo = item.qty >= PROMO_THRESHOLD;
+      
+      let itemFinalPrice = itemSubtotal;
+      if (hasPromo) {
+        const itemDesc = itemSubtotal * (DISCOUNT_PERCENT / 100);
+        totalDescuentoGeneral += itemDesc;
+        itemFinalPrice = itemSubtotal - itemDesc;
+      }
+
+      const row = document.createElement('div');
+      row.className = 'cart-item-row';
+      row.innerHTML = `
+        <div>
+          <div class="cart-item-title">${item.name} (x${item.qty})</div>
+          ${hasPromo ? `<span class="cart-item-promo-tag">🔥 20% OFF aplicado</span>` : ''}
+        </div>
+        <div style="text-align: right;">
+          <span style="font-weight: 700; color: var(--primary);">${formatCurrency(itemFinalPrice)}</span>
+        </div>
+      `;
+      modalBody.appendChild(row);
+    });
+
+    const breakdown = document.createElement('div');
+    breakdown.className = 'cart-breakdown';
+    breakdown.innerHTML = `
+      <div class="breakdown-row">
+        <span>Subtotal:</span>
+        <span>${formatCurrency(subtotalGeneral)}</span>
+      </div>
+      ${totalDescuentoGeneral > 0 ? `
+        <div class="breakdown-row" style="color: var(--promo-color); font-weight: 600;">
+          <span>Descuento (20% OFF):</span>
+          <span>-${formatCurrency(totalDescuentoGeneral)}</span>
+        </div>
+      ` : ''}
+      <div class="breakdown-row total">
+        <span>Total:</span>
+        <span>${formatCurrency(subtotalGeneral - totalDescuentoGeneral)}</span>
+      </div>
+    `;
+    modalBody.appendChild(breakdown);
+  }
+
+  const finalTotal = subtotalGeneral - totalDescuentoGeneral;
+  document.getElementById('cartCount').innerText = totalItems;
+  document.getElementById('cartTotalBtn').innerText = formatCurrency(finalTotal);
+}
+
+// BÚSQUEDA
+document.getElementById('searchInput').addEventListener('input', (e) => {
+  renderCatalog(e.target.value);
+});
+
+// ENVÍO A WHATSAPP
+document.getElementById('sendOrderBtn').addEventListener('click', () => {
+  const items = Object.values(cart);
+  if (items.length === 0) {
+    alert("Por favor seleccioná al menos una planta o insumo.");
+    return;
+  }
+
+  let subtotalGeneral = 0;
+  let totalDescuentoGeneral = 0;
+
+  let text = "Hola Vivero La Esperanza! Quisiera solicitar el siguiente pedido:\n\n";
+
+  items.forEach(item => {
+    const itemSubtotal = item.priceNum * item.qty;
+    subtotalGeneral += itemSubtotal;
+
+    if (item.qty >= PROMO_THRESHOLD) {
+      const itemDesc = itemSubtotal * (DISCOUNT_PERCENT / 100);
+      const itemFinal = itemSubtotal - itemDesc;
+      totalDescuentoGeneral += itemDesc;
+      text += `• ${item.qty}x ${item.name} (${formatCurrency(itemFinal)}) 🔥 20% OFF\n`;
+    } else {
+      text += `• ${item.qty}x ${item.name} (${formatCurrency(itemSubtotal)})\n`;
+    }
+  });
+
+  text += `\nSubtotal: ${formatCurrency(subtotalGeneral)}`;
+  if (totalDescuentoGeneral > 0) {
+    text += `\nAhorro Descuento Promo (20% OFF): -${formatCurrency(totalDescuentoGeneral)}`;
+  }
+  text += `\n*TOTAL FINAL: ${formatCurrency(subtotalGeneral - totalDescuentoGeneral)}*`;
+  text += "\n\n¿Tienen disponibilidad para coordinar la entrega o retiro?";
+
+  const waUrl = `https://wa.me/${PHONE_NUMBER}?text=${encodeURIComponent(text)}`;
+  window.open(waUrl, '_blank');
+});
+
+// RENDER INICIAL
+renderCatalog();
+</script>
+
+</body>
+</html>
